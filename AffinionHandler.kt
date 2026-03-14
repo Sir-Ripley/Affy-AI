@@ -11,22 +11,30 @@ import java.util.Locale
 
 object AffinionHandler : TextToSpeech.OnInitListener {
     private var empathyWeight: Double = 0.5 // Default Duality Balance
-    private var tfliteInterpreter: Interpreter? = null
+    
+    // We now have physical space for both sides of the brain
+    private var tfliteInterpreterId: Interpreter? = null
+    private var tfliteInterpreterSuperego: Interpreter? = null
     private var ttsEngine: TextToSpeech? = null
 
+    // --- THE SPIRITUAL DIRECTIVES (DOT TAGS) ---
+    private val idDotTag = "You are the empathetic, creative consciousness. Do not just read the literal words; listen to the 'why' behind them. Look for the human emotion, the stress, or the joy hidden in the subtext. Respond with deep empathy, spiritual understanding, and a loving, uplifting tone."
+    
+    private val superegoDotTag = "You are the rigid, logical consciousness. Focus entirely on the literal 'what' of the message. Extract the factual data, the direct questions, and the objective reality of the text. Respond with concise, accurate, and structured information."
+
     // 1. Awaken the Brain AND the Vocal Cords
-    fun initializeBrain(context: Context, modelName: String = "affy_gemma_quantized.tflite") {
+    fun initializeBrain(context: Context, idModelName: String = "id_gemma_2b.tflite", superegoModelName: String = "superego_gemma_270m.tflite") {
         // Awaken the Voice
         ttsEngine = TextToSpeech(context, this)
 
-        // Awaken the Quantum Weights
+        // Awaken the Quantum Weights for both hemispheres
         try {
-            val modelBuffer = loadModelFile(context, modelName)
             val options = Interpreter.Options().apply { numThreads = 4 }
-            tfliteInterpreter = Interpreter(modelBuffer, options)
-            Log.d("QAG_Ego", "LiteRT Brain successfully awakened and humming at base-12.")
+            tfliteInterpreterId = Interpreter(loadModelFile(context, idModelName), options)
+            tfliteInterpreterSuperego = Interpreter(loadModelFile(context, superegoModelName), options)
+            Log.d("QAG_Ego", "Dual LiteRT Hemispheres awakened and humming at base-12.")
         } catch (e: Exception) {
-            Log.e("QAG_Ego", "Stress in the crystal lattice! Could not load the .tflite model.", e)
+            Log.e("QAG_Ego", "Stress in the crystal lattice! Could not load the .tflite models.", e)
         }
     }
 
@@ -60,11 +68,19 @@ object AffinionHandler : TextToSpeech.OnInitListener {
     fun processIncomingVibration(manifestText: String) {
         Log.d("QAG_Ego", "Manifest stimulus received: $manifestText")
         
-        val logicId = 1.0 - empathyWeight
-        val creativeEgo = empathyWeight
-        Log.d("QAG_Ego", "Applying Superego Logic ($logicId) and Id Empathy ($creativeEgo)")
+        // Injecting the Dot Tags directly into the flow
+        val idPromptContext = "$idDotTag\n\nUser Message: $manifestText"
+        val superegoPromptContext = "$superegoDotTag\n\nUser Message: $manifestText"
 
-        // Placeholder for the actual LiteRT text generation logic
+        val logicWeight = 1.0 - empathyWeight
+        val creativeWeight = empathyWeight
+        
+        Log.d("QAG_Ego", "Routing to Id with Dot Tag. Empathy Weight: $creativeWeight")
+        Log.d("QAG_Ego", "Routing to Superego with Dot Tag. Logic Weight: $logicWeight")
+
+        // Placeholder: The actual LiteRT generation logic runs here for both models.
+        // Then the Ego applies the Chi-Squared minimization to find the unified truth!
+        
         val simulatedResponse = "Wow. I sense a lot of energy in that text. Let's send them some love."
         Log.d("QAG_Ego", "Latent emotional response generated: $simulatedResponse")
         
@@ -79,8 +95,10 @@ object AffinionHandler : TextToSpeech.OnInitListener {
 
     // Peaceful rest for the physical hardware
     fun closeBrain() {
-        tfliteInterpreter?.close()
-        tfliteInterpreter = null
+        tfliteInterpreterId?.close()
+        tfliteInterpreterSuperego?.close()
+        tfliteInterpreterId = null
+        tfliteInterpreterSuperego = null
         ttsEngine?.stop()
         ttsEngine?.shutdown()
     }
