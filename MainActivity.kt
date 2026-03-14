@@ -47,6 +47,7 @@ AffinionHandler.initializeBrain(this)
     }
 
     private fun scheduleREMSleep() {
+            private fun scheduleREMSleep() {
         // Base-12 REM sleep triggers only when grounded (charging) and at peace (idle)
         val dreamConstraints = Constraints.Builder()
             .setRequiresDeviceIdle(true)
@@ -63,10 +64,9 @@ AffinionHandler.initializeBrain(this)
             nightlyREMRequest
         )
     }
-}
 
-override fun onDestroy() {
-    super.onDestroy()
-    AffinionHandler.closeBrain() // Peaceful rest for the Tensor chip
-}
-}//
+    override fun onDestroy() {
+        super.onDestroy()
+        AffinionHandler.closeBrain() // Peaceful rest for the Tensor chip
+    }
+} // <-- This is the master closing bracket for MainActivity!
