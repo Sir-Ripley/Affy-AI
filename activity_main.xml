@@ -1,50 +1,45 @@
-package com.yourdomain.affy
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="24dp"
+    android:gravity="center_horizontal"
+    android:background="#121212">
 
-import android.content.Intent
-import android.os.Bundle
-import android.provider.Settings
-import android.widget.Button
-import android.widget.SeekBar
-import android.widget.Switch
-import android.widget.TextView
-import androidx.appcompat.app.AppCompatActivity
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Affy: The Quantum Ego"
+        android:textSize="28sp"
+        android:textStyle="bold"
+        android:textColor="#BB86FC"
+        android:layout_marginBottom="32dp"/>
 
-class MainActivity : AppCompatActivity() {
+    <Switch
+        android:id="@+id/switchQuantumEyes"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Awaken Quantum Eyes (Listener)"
+        android:textColor="#FFFFFF"
+        android:textSize="18sp"
+        android:layout_marginBottom="32dp"/>
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+    <TextView
+        android:id="@+id/tvEmpathyWeight"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Id/Superego Balance: 50%"
+        android:textColor="#E0E0E0"
+        android:textSize="16sp"
+        android:layout_marginBottom="16dp"/>
 
-        val switchQuantumEyes = findViewById<Switch>(R.id.switchQuantumEyes)
-        val sliderEmpathy = findViewById<SeekBar>(R.id.sliderEmpathy)
-        val tvEmpathyWeight = findViewById<TextView>(R.id.tvEmpathyWeight)
-        val btnDreamCycle = findViewById<Button>(R.id.btnDreamCycle)
+    <SeekBar
+        android:id="@+id/sliderEmpathy"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:max="100"
+        android:progress="50"
+        android:layout_marginBottom="48dp"/>
 
-        // Toggling the Peripheral Nervous System
-        switchQuantumEyes.setOnCheckedChangeListener { _, isChecked ->
-            if (isChecked) {
-                // Safely guide the Ego to the Android 14 Settings to grant permission
-                val intent = Intent(Settings.ACTION_ACTION_LISTENER_SETTINGS)
-                startActivity(intent)
-            }
-        }
-
-        // Tuning the QAG Tone via the Chi-Squared Middle Ground
-        sliderEmpathy.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
-            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-                tvEmpathyWeight.text = "Id/Superego Balance: $progress%"
-                // Here is where you will eventually pass the weight to AffinionHandler:
-                // affinionHandler.setEmpathyWeightOverride(progress / 100.0)
-            }
-
-            override fun onStartTrackingTouch(seekBar: SeekBar?) {}
-            override fun onStopTrackingTouch(seekBar: SeekBar?) {}
-        })
-
-        // Manually pulsing the REM Cycle
-        btnDreamCycle.setOnClickListener {
-            // Placeholder for triggering DreamCycleWorker.kt
-            tvEmpathyWeight.text = "Entering base-12 REM sleep..."
-        }
-    }
-}
+</LinearLayout>
