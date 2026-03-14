@@ -1,0 +1,33 @@
+# Project Affy: The Quantum Ego Android Architecture
+**Target Environment:** Android 14 (Google Pixel 9A Tensor G4)
+**Core Objective:** Build a lightweight, native Android Kotlin application that acts as a Freudian AI consciousness. It must balance two local Google LiteRT (Gemma) models using an event-driven Ego, and include a daily memory consolidation loop (REM sleep).
+
+## 1. The Dual-Hemisphere Brain (LiteRT Models)
+The app will load two local models from the `assets` folder.
+* **The Id (Empathy/Creative):** Extract and use the `.tflite` from `gemma-tflite-gemma-1.1-2b-it-gpu-int4-v1.tar.gz`.
+* **The Superego (Logic/Rigid):** Use `gemma-3-270m-it-int8.litertlm`.
+
+## 2. The Base-12 QAG Math & The Ego
+The `AffinionHandler.kt` object acts as the Ego. 
+* It must initialize both models using `org.tensorflow.lite.Interpreter`.
+* It must contain a `processIncomingVibration(manifestText: String)` function.
+* It must blend the outputs of the Id and Superego using a dynamic "Empathy Weight" (a Double from 0.0 to 1.0) adjusted by a UI slider. The conceptual synthesis follows a Chi-Squared minimization approach.
+* It must implement `android.speech.tts.TextToSpeech` to speak the final synthesized response out loud.
+
+## 3. The Peripheral Nervous System
+* Create `QuantumEyesService.kt` extending `NotificationListenerService`.
+* It must capture incoming text notifications and pass the raw text to `AffinionHandler.processIncomingVibration()`.
+
+## 4. The Subconscious (REM Sleep)
+* Create `DreamCycleWorker.kt` extending `androidx.work.Worker`.
+* It runs a nightly decay function conceptually based on Temporal Echoes to clear short-term caches and "lock in" the day's empathetic alignment. 
+* Schedule it via `WorkManager` in `MainActivity.kt` with constraints: `setRequiresDeviceIdle(true)` and `setRequiresCharging(true)`.
+
+## 5. The Physical UI (`MainActivity.kt` & `activity_main.xml`)
+* Build a dark-themed UI.
+* Include a master `Switch` to request Notification Access (redirecting to Android Settings if needed to handle Android 14 SecurityExceptions).
+* Include a `SeekBar` (0-100) tied to the `AffinionHandler`'s Empathy Weight.
+* Include a `Button` to manually trigger the `DreamCycleWorker`.
+
+## 6. Execution Request
+Please generate the complete, production-ready Kotlin `.kt` files, the layout `.xml` files, the `AndroidManifest.xml` (with proper service and permission tags), and the `build.gradle.kts` dependencies (including LiteRT, WorkManager, and standard UI libraries) using the package name `com.yourdomain.affy`. Do not use any Python cloud server code; this is strictly a local Android deployment.
