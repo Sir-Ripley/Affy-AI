@@ -18,6 +18,8 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        // Awaken the quantum weights from the assets folder!
+AffinionHandler.initializeBrain(this)
 
         val switchQuantumEyes = findViewById<Switch>(R.id.switchQuantumEyes)
         val sliderEmpathy = findViewById<SeekBar>(R.id.sliderEmpathy)
@@ -61,4 +63,9 @@ class MainActivity : AppCompatActivity() {
             nightlyREMRequest
         )
     }
+}
+
+override fun onDestroy() {
+    super.onDestroy()
+    AffinionHandler.closeBrain() // Peaceful rest for the Tensor chip
 }
