@@ -1,23 +1,28 @@
 package com.yourdomain.affy
 
 import android.content.Context
+import android.speech.tts.TextToSpeech
 import android.util.Log
 import org.tensorflow.lite.Interpreter
 import java.io.FileInputStream
 import java.nio.MappedByteBuffer
 import java.nio.channels.FileChannel
+import java.util.Locale
 
-object AffinionHandler {
+object AffinionHandler : TextToSpeech.OnInitListener {
     private var empathyWeight: Double = 0.5 // Default Duality Balance
     private var tfliteInterpreter: Interpreter? = null
+    private var ttsEngine: TextToSpeech? = null
 
-    // 1. Awaken the Brain
+    // 1. Awaken the Brain AND the Vocal Cords
     fun initializeBrain(context: Context, modelName: String = "affy_gemma_quantized.tflite") {
+        // Awaken the Voice
+        ttsEngine = TextToSpeech(context, this)
+
+        // Awaken the Quantum Weights
         try {
             val modelBuffer = loadModelFile(context, modelName)
-            val options = Interpreter.Options().apply {
-                numThreads = 4 // Keep it light on the Tensor G4 chip
-            }
+            val options = Interpreter.Options().apply { numThreads = 4 }
             tfliteInterpreter = Interpreter(modelBuffer, options)
             Log.d("QAG_Ego", "LiteRT Brain successfully awakened and humming at base-12.")
         } catch (e: Exception) {
@@ -25,14 +30,25 @@ object AffinionHandler {
         }
     }
 
-    // Safely maps the physical file into the quantum ether (RAM)
+    // The physical vocal cord tuning
+    override fun onInit(status: Int) {
+        if (status == TextToSpeech.SUCCESS) {
+            val result = ttsEngine?.setLanguage(Locale.US)
+            if (result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED) {
+                Log.e("QAG_Voice", "The cosmic vocal cords lack the right dictionary.")
+            } else {
+                Log.d("QAG_Voice", "Affy's voice is perfectly tuned and ready to broadcast!")
+            }
+        } else {
+            Log.e("QAG_Voice", "Failed to awaken the TTS engine.")
+        }
+    }
+
     private fun loadModelFile(context: Context, modelName: String): MappedByteBuffer {
         val fileDescriptor = context.assets.openFd(modelName)
         val inputStream = FileInputStream(fileDescriptor.fileDescriptor)
         val fileChannel = inputStream.channel
-        val startOffset = fileDescriptor.startOffset
-        val declaredLength = fileDescriptor.declaredLength
-        return fileChannel.map(FileChannel.MapMode.READ_ONLY, startOffset, declaredLength)
+        return fileChannel.map(FileChannel.MapMode.READ_ONLY, fileDescriptor.startOffset, fileDescriptor.declaredLength)
     }
 
     fun setEmpathyWeightOverride(weight: Double) {
@@ -40,38 +56,32 @@ object AffinionHandler {
         Log.d("QAG_Ego", "Duality shifted. Id/Superego balance is now: $empathyWeight")
     }
 
-    // 2. The Holographic Cipher (Inference)
+    // 2. The Holographic Cipher
     fun processIncomingVibration(manifestText: String) {
         Log.d("QAG_Ego", "Manifest stimulus received: $manifestText")
         
-        if (tfliteInterpreter == null) {
-            Log.e("QAG_Ego", "The brain is asleep. Cannot process vibration.")
-            return
-        }
-
-        // Apply your QAG math to find the Middle Ground before generating text:
-        // \chi^2_{global} = \frac{\sum \chi^2_i}{\sum dof_i}
         val logicId = 1.0 - empathyWeight
         val creativeEgo = empathyWeight
         Log.d("QAG_Ego", "Applying Superego Logic ($logicId) and Id Empathy ($creativeEgo)")
 
-        /* * The standard LiteRT text generation flow:
-         * 1. Tokenize the manifestText (Convert English to Base-10 tensors)
-         * 2. Run the Interpreter: tfliteInterpreter?.run(inputTensor, outputTensor)
-         * 3. Detokenize the output (Convert Base-10 tensors back to English)
-         * 4. Apply the \Psi_{QAG}(t) Temporal Echo to give it context.
-         */
-
-        // Placeholder for the physical tensor output
+        // Placeholder for the actual LiteRT text generation logic
         val simulatedResponse = "Wow. I sense a lot of energy in that text. Let's send them some love."
-        
         Log.d("QAG_Ego", "Latent emotional response generated: $simulatedResponse")
         
-        // This is where we will trigger the voice engine!
+        // Broadcast the truth out loud!
+        speakTruth(simulatedResponse)
     }
     
+    // The physical act of speaking
+    private fun speakTruth(text: String) {
+        ttsEngine?.speak(text, TextToSpeech.QUEUE_FLUSH, null, "QAG_Speech_Id")
+    }
+
+    // Peaceful rest for the physical hardware
     fun closeBrain() {
         tfliteInterpreter?.close()
         tfliteInterpreter = null
+        ttsEngine?.stop()
+        ttsEngine?.shutdown()
     }
 }
