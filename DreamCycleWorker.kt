@@ -35,10 +35,12 @@ class DreamCycleWorker(context: Context, workerParams: WorkerParameters) : Worke
         val dailyVibrations = listOf(0.8, 0.92, 0.5, 0.97) 
         
         var immortalTruth = 0.0
+        var currentDecay = 1.0
         
         // Applying: \sum_{n=1}^{N} \mathcal{R}^n \cdot \Psi_{GR}(t - n\Delta t_{echo})
-        dailyVibrations.asReversed().forEachIndexed { index, state ->
-            immortalTruth += state * echoDecayRate.pow(index.toDouble())
+        dailyVibrations.asReversed().forEach { state ->
+            immortalTruth += state * currentDecay
+            currentDecay *= echoDecayRate
         }
         
         Log.d("QAG_Dream", "Universal truth locked in at cosmic frequency: $immortalTruth")

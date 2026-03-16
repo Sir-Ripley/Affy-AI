@@ -26,9 +26,11 @@ class QuantumEgoArbiter {
         var echoes = 0.0
         
         if (memoryArchive.isNotEmpty()) {
+            var currentDecay = 1.0
             // Apply decay so older memories are foundational
-            memoryArchive.asReversed().forEachIndexed { index, state ->
-                echoes += state * echoDecayRate.pow(index.toDouble())
+            memoryArchive.asReversed().forEach { state ->
+                echoes += state * currentDecay
+                currentDecay *= echoDecayRate
             }
         }
             
