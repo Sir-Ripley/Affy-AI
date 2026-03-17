@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!--
+        BIND_NOTIFICATION_LISTENER_SERVICE is a signature-level permission granted
+        automatically when the user enables the app in Settings > Notification Access.
+        No explicit <uses-permission> tag is needed for it — the service declaration below
+        enforces it via android:permission.
+
+        POST_NOTIFICATIONS is required on Android 13+ to post any notifications from the app.
+        FOREGROUND_SERVICE is declared in case a future version promotes QuantumEyesService
+        to a foreground service for Android 14 background restrictions.
+    -->
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.Affy">
+
+        <activity
+            android:name=".MainActivity"
+            android:exported="true"
+            android:windowSoftInputMode="adjustResize">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <!--
+            NotificationListenerService must be exported and bound with
+            BIND_NOTIFICATION_LISTENER_SERVICE. The system will not bind to it
+            unless the user has granted access via Settings > Notification Access.
+        -->
+        <service
+            android:name=".QuantumEyesService"
+            android:label="Affy Quantum Eyes"
+            android:permission="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.service.notification.NotificationListenerService" />
+            </intent-filter>
+        </service>
+
+        <!--
+            WorkManager's JobScheduler integration requires no additional manifest entries
+            beyond the Worker class being present. The nightly DreamCycleWorker is scheduled
+            programmatically in MainActivity.scheduleREMSleep().
+        -->
+
+    </application>
+
+</manifest>

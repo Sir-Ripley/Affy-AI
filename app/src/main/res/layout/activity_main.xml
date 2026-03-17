@@ -16,15 +16,17 @@
         android:textColor="#BB86FC"
         android:layout_marginBottom="32dp"/>
 
+    <!-- Notification Listener toggle — redirects to Android Settings if permission not granted -->
     <Switch
         android:id="@+id/switchQuantumEyes"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Awaken Quantum Eyes (Listener)"
+        android:text="Awaken Quantum Eyes (Notification Listener)"
         android:textColor="#FFFFFF"
-        android:textSize="18sp"
+        android:textSize="16sp"
         android:layout_marginBottom="32dp"/>
 
+    <!-- Empathy weight label -->
     <TextView
         android:id="@+id/tvEmpathyWeight"
         android:layout_width="wrap_content"
@@ -32,8 +34,9 @@
         android:text="Id/Superego Balance: 50%"
         android:textColor="#E0E0E0"
         android:textSize="16sp"
-        android:layout_marginBottom="16dp"/>
+        android:layout_marginBottom="8dp"/>
 
+    <!-- Freudian slider: 0 = pure Superego (logic), 100 = pure Id (empathy) -->
     <SeekBar
         android:id="@+id/sliderEmpathy"
         android:layout_width="match_parent"
@@ -41,5 +44,16 @@
         android:max="100"
         android:progress="50"
         android:layout_marginBottom="48dp"/>
+
+    <!-- Manual Dream Cycle trigger for testing — runs DreamCycleWorker immediately -->
+    <Button
+        android:id="@+id/btnTriggerDream"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Trigger Dream Cycle"
+        android:textColor="#121212"
+        android:backgroundTint="#BB86FC"
+        android:paddingHorizontal="32dp"
+        android:paddingVertical="12dp"/>
 
 </LinearLayout>
