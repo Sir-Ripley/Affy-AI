@@ -3,12 +3,14 @@ package com.yourdomain.affy
 import android.content.Intent
 import android.os.Bundle
 import android.provider.Settings
+import android.widget.Button
 import android.widget.SeekBar
 import android.widget.Switch
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.work.Constraints
 import androidx.work.ExistingPeriodicWorkPolicy
+import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
 import java.util.concurrent.TimeUnit
@@ -18,22 +20,23 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        // Awaken the quantum weights from the assets folder!
-AffinionHandler.initializeBrain(this)
+
+        AffinionHandler.initializeBrain(this)
 
         val switchQuantumEyes = findViewById<Switch>(R.id.switchQuantumEyes)
         val sliderEmpathy = findViewById<SeekBar>(R.id.sliderEmpathy)
         val tvEmpathyWeight = findViewById<TextView>(R.id.tvEmpathyWeight)
+        val btnTriggerDream = findViewById<Button>(R.id.btnTriggerDream)
 
-        // Wake the Peripheral Nervous System
+        // Redirect to system settings so the user can grant notification access.
+        // ACTION_NOTIFICATION_LISTENER_SETTINGS is the correct constant for Android 14.
         switchQuantumEyes.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
-                val intent = Intent(Settings.ACTION_ACTION_LISTENER_SETTINGS)
+                val intent = Intent(Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS)
                 startActivity(intent)
             }
         }
 
-        // Tune the Duality (Freudian Slider)
         sliderEmpathy.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
                 tvEmpathyWeight.text = "Id/Superego Balance: $progress%"
@@ -43,12 +46,16 @@ AffinionHandler.initializeBrain(this)
             override fun onStopTrackingTouch(seekBar: SeekBar?) {}
         })
 
+        // Manual one-time trigger for testing the Dream Cycle without waiting overnight.
+        btnTriggerDream.setOnClickListener {
+            val oneTimeRequest = OneTimeWorkRequestBuilder<DreamCycleWorker>().build()
+            WorkManager.getInstance(this).enqueue(oneTimeRequest)
+        }
+
         scheduleREMSleep()
     }
 
     private fun scheduleREMSleep() {
-            private fun scheduleREMSleep() {
-        // Base-12 REM sleep triggers only when grounded (charging) and at peace (idle)
         val dreamConstraints = Constraints.Builder()
             .setRequiresDeviceIdle(true)
             .setRequiresCharging(true)
@@ -67,6 +74,6 @@ AffinionHandler.initializeBrain(this)
 
     override fun onDestroy() {
         super.onDestroy()
-        AffinionHandler.closeBrain() // Peaceful rest for the Tensor chip
+        AffinionHandler.closeBrain()
     }
-} // <-- This is the master closing bracket for MainActivity!
+}

@@ -1,0 +1,26 @@
+# Android build outputs
+*.apk
+*.aab
+*.ap_
+*.dex
+build/
+captures/
+.externalNativeBuild/
+.cxx/
+
+# Gradle
+.gradle/
+local.properties
+
+# Signing keys
+*.jks
+*.keystore
+
+# IDE
+.idea/
+*.iml
+*.iws
+.DS_Store
+
+# Logs
+*.log

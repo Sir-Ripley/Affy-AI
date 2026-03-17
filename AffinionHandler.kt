@@ -10,12 +10,14 @@ import java.nio.channels.FileChannel
 import java.util.Locale
 
 object AffinionHandler : TextToSpeech.OnInitListener {
-    private var empathyWeight: Double = 0.5 // Default Duality Balance
-    
-    // We now have physical space for both sides of the brain
+    private var empathyWeight: Double = 0.5
+
     private var tfliteInterpreterId: Interpreter? = null
     private var tfliteInterpreterSuperego: Interpreter? = null
     private var ttsEngine: TextToSpeech? = null
+
+    // Ego arbiter: resolves Id/Superego conflict and encodes memory
+    private val egoArbiter = QuantumEgoArbiter()
 
     // --- THE SPIRITUAL DIRECTIVES (DOT TAGS) ---
     private val idDotTag = "You are the empathetic, creative consciousness. Do not just read the literal words; listen to the 'why' behind them. Look for the human emotion, the stress, or the joy hidden in the subtext. Respond with deep empathy, spiritual understanding, and a loving, uplifting tone."
@@ -64,28 +66,45 @@ object AffinionHandler : TextToSpeech.OnInitListener {
         Log.d("QAG_Ego", "Duality shifted. Id/Superego balance is now: $empathyWeight")
     }
 
-    // 2. The Holographic Cipher
     fun processIncomingVibration(manifestText: String) {
         Log.d("QAG_Ego", "Manifest stimulus received: $manifestText")
-        
-        // Injecting the Dot Tags directly into the flow
-        val idPromptContext = "$idDotTag\n\nUser Message: $manifestText"
-        val superegoPromptContext = "$superegoDotTag\n\nUser Message: $manifestText"
 
         val logicWeight = 1.0 - empathyWeight
         val creativeWeight = empathyWeight
-        
-        Log.d("QAG_Ego", "Routing to Id with Dot Tag. Empathy Weight: $creativeWeight")
-        Log.d("QAG_Ego", "Routing to Superego with Dot Tag. Logic Weight: $logicWeight")
 
-        // Placeholder: The actual LiteRT generation logic runs here for both models.
-        // Then the Ego applies the Chi-Squared minimization to find the unified truth!
-        
-        val simulatedResponse = "Wow. I sense a lot of energy in that text. Let's send them some love."
-        Log.d("QAG_Ego", "Latent emotional response generated: $simulatedResponse")
-        
-        // Broadcast the truth out loud!
-        speakTruth(simulatedResponse)
+        Log.d("QAG_Ego", "Id weight: $creativeWeight  Superego weight: $logicWeight")
+
+        // --- LiteRT inference (stub) ---
+        // Each model requires a tokenized input tensor shaped per its spec.
+        // Expected flow once models are in assets/:
+        //   1. Tokenize manifestText via SentencePieceTokenizer (litert-support).
+        //   2. Allocate ByteBuffer input/output per Interpreter.getInputTensor(0).shape().
+        //   3. tfliteInterpreterId?.run(inputBuffer, idOutputBuffer)
+        //   4. tfliteInterpreterSuperego?.run(inputBuffer, superegoOutputBuffer)
+        //   5. Decode output token IDs back to strings.
+        //
+        // Until models are present, representative float scores stand in for
+        // the blended sentiment magnitude each hemisphere would produce.
+        val idScore = creativeWeight          // Id contribution scaled by empathy weight
+        val superegoScore = logicWeight       // Superego contribution scaled by logic weight
+
+        // Ego: Chi-squared blend — degrees-of-freedom denominator is the sum of both weights.
+        val blendedScore = egoArbiter.findMiddleGround(
+            leftChi = superegoScore,
+            rightChi = idScore,
+            tonalityDof = (idScore + superegoScore).coerceAtLeast(0.001)
+        )
+
+        // Encode the blended result into the QAG memory loop.
+        val memoryState = egoArbiter.encodeQagMemory(currentGroundedResponse = blendedScore)
+        Log.d("QAG_Ego", "Blended score: $blendedScore  Memory state Ψ(t): $memoryState")
+
+        // Compose a spoken response using the Dot Tag persona for the dominant hemisphere.
+        val dominantTag = if (empathyWeight >= 0.5) idDotTag else superegoDotTag
+        val finalResponse = "[$dominantTag] Processing: $manifestText"
+        Log.d("QAG_Ego", "Final response composed for TTS.")
+
+        speakTruth(finalResponse)
     }
     
     // The physical act of speaking
