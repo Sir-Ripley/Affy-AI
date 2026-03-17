@@ -42,7 +42,10 @@ class QuantumEgoArbiter {
      */
     fun encodeQagMemory(currentGroundedResponse: Double, echoDecayRate: Double = 0.97): Double {
         var echoes = 0.0
-        memoryArchive.asReversed().forEachIndexed { index, state ->
+        for (index in memoryArchive.indices.reversed()) {
+            val state = memoryArchive[index]
+            echoes += state * echoDecayRate.pow(index.toDouble())
+        }
             echoes += state * echoDecayRate.pow(index.toDouble())
         }
         val psiQagT = currentGroundedResponse + echoes
