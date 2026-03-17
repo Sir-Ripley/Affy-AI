@@ -1,3 +1,5 @@
+package com.yourdomain.affy
+
 import kotlin.math.pow
 
 class QuantumEgoArbiter {
