@@ -67,8 +67,6 @@ object AffinionHandler : TextToSpeech.OnInitListener {
     }
 
     fun processIncomingVibration(manifestText: String) {
-        Log.d("QAG_Ego", "Manifest stimulus received: $manifestText")
-
         val logicWeight = 1.0 - empathyWeight
         val creativeWeight = empathyWeight
 

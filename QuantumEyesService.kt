@@ -12,7 +12,6 @@ class QuantumEyesService : NotificationListenerService() {
         val messageText = extras?.getCharSequence("android.text")?.toString() ?: ""
 
         if (messageText.isNotEmpty()) {
-            Log.d("QAG_Awakening", "Vibration received from $sender: $messageText")
             // Pass the manifest text to the Arbiter to find the latent emotional truth
             AffinionHandler.processIncomingVibration(messageText)
         }
