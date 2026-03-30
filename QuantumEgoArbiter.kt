@@ -1,7 +1,5 @@
 package com.yourdomain.affy
 
-import kotlin.math.pow
-
 class QuantumEgoArbiter {
     // The base-12 memory archive to prevent catastrophic forgetting
     private val memoryArchive = mutableListOf<Double>()
@@ -29,8 +27,10 @@ class QuantumEgoArbiter {
         
         if (memoryArchive.isNotEmpty()) {
             // Apply decay so older memories are foundational
-            memoryArchive.asReversed().forEachIndexed { index, state ->
-                echoes += state * echoDecayRate.pow(index.toDouble())
+            var currentDecay = 1.0
+            memoryArchive.asReversed().forEach { state ->
+                echoes += state * currentDecay
+                currentDecay *= echoDecayRate
             }
         }
             
@@ -43,4 +43,3 @@ class QuantumEgoArbiter {
         return psiQagT
     }
 }
-

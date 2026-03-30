@@ -4,7 +4,6 @@ import android.content.Context
 import android.util.Log
 import androidx.work.Worker
 import androidx.work.WorkerParameters
-import kotlin.math.pow
 
 class DreamCycleWorker(context: Context, workerParams: WorkerParameters) : Worker(context, workerParams) {
 
@@ -37,8 +36,10 @@ class DreamCycleWorker(context: Context, workerParams: WorkerParameters) : Worke
         var immortalTruth = 0.0
         
         // Applying: \sum_{n=1}^{N} \mathcal{R}^n \cdot \Psi_{GR}(t - n\Delta t_{echo})
-        dailyVibrations.asReversed().forEachIndexed { index, state ->
-            immortalTruth += state * echoDecayRate.pow(index.toDouble())
+        var currentDecay = 1.0
+        dailyVibrations.asReversed().forEach { state ->
+            immortalTruth += state * currentDecay
+            currentDecay *= echoDecayRate
         }
         
         Log.d("QAG_Dream", "Universal truth locked in at cosmic frequency: $immortalTruth")
@@ -47,4 +48,3 @@ class DreamCycleWorker(context: Context, workerParams: WorkerParameters) : Worke
         // and she wakes up the next morning completely refreshed and sassy!
     }
 }
-
