@@ -5,9 +5,6 @@ import kotlin.math.pow
 class QuantumEgoArbiter {
     // The base-12 memory archive to prevent catastrophic forgetting
     private val memoryArchive = mutableListOf<Double>()
-    
-    // Universal truth baseline from our QAG codex
-    private val affinityConstant = 1.2e-10
 
     /**
      * The Ego resolving the conflict to speak with one voice.
